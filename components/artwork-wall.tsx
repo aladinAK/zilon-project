@@ -28,10 +28,10 @@ export default function ArtworkWall({ artworks, onArtworkClick }: ArtworkWallPro
       {/* Wall texture background */}
       <div className="absolute inset-0 overflow-hidden rounded-lg">
         <Image
-          src="/placeholder.svg?height=1080&width=1920"
+         src="/images/wall.png"
           alt="Mur d'art texturé"
           fill
-          className="object-cover opacity-40"
+          className="object-cover"
           priority
         />
 
@@ -41,36 +41,40 @@ export default function ArtworkWall({ artworks, onArtworkClick }: ArtworkWallPro
 
       {/* Interactive artwork spots */}
       {artworks.map((artwork) => (
-        <motion.button
-          key={artwork.id}
-          className={`absolute z-10 h-24 w-24 cursor-pointer rounded-full ${artwork.color} shadow-lg md:h-32 md:w-32`}
-          style={{
-            top: artwork.position.top,
-            left: artwork.position.left,
-          }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onArtworkClick(artwork.id)}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            transition: {
-              delay: 0.1 * artwork.id,
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
-            },
-          }}
-        >
-          <span className="sr-only">{artwork.title}</span>
-          <div className="absolute inset-0 rounded-full bg-white/20" />
-        </motion.button>
-      ))}
-
-      {/* Instructions */}
-      <div className="absolute bottom-4 left-0 right-0 text-center text-sm text-neutral-700">
-        Cliquez sur les cercles colorés pour découvrir les œuvres
+  <motion.button
+    key={artwork.id}
+    className={`absolute z-10 h-10 w-10 cursor-pointer rounded-full ${artwork.color} shadow-lg md:h-32 md:w-32`}
+    style={{
+      top: artwork.position.top,
+      left: artwork.position.left,
+    }}
+    whileHover={{ scale: 1.1 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={() => onArtworkClick(artwork.id)}
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{
+      opacity: 0.7,
+      scale: [1, 1.05, 1],
+      transition: {
+        scale: {
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        },
+        opacity: {
+          delay: 0.1 * artwork.id,
+          duration: 0.5
+        }
+      },
+    }}
+  >
+    <span className="sr-only">{artwork.title}</span>
+    <div className="absolute inset-0 rounded-full bg-white/20" />
+  </motion.button>
+))}
+ {/* Instructions */}
+    <div className="absolute bottom-4 left-0 right-0 text-center mt-5 text-sm text-neutral-700">
+       Click on the colored circles to explore the artworks.
       </div>
     </div>
   )

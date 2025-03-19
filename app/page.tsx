@@ -1,101 +1,115 @@
-import Image from "next/image";
+"use client"
+
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { X } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import ArtworkWall from "@/components/artwork-wall"
+import ArtworkDetail from "@/components/artwork-detail"
+
+// Sample artwork data
+const artworks = [
+  {
+    id: 1,
+    title: "Abstract Harmony",
+    description: "An exploration of color and form, creating visual harmony through abstract elements.",
+    year: "2023",
+    medium: "Acrylic on canvas",
+    dimensions: "100 × 80 cm",
+    position: { top: "15%", left: "25%" },
+    color: "bg-rose-500",
+  },
+  {
+    id: 2,
+    title: "Urban Dreams",
+    description: "A reflection on urban life and the dreams that flourish within city environments.",
+    year: "2022",
+    medium: "Mixed media",
+    dimensions: "120 × 90 cm",
+    position: { top: "30%", left: "65%" },
+    color: "bg-amber-400",
+  },
+  {
+    id: 3,
+    title: "Nature's Whisper",
+    description: "Inspired by the subtle sounds and movements of nature in its purest form.",
+    year: "2023",
+    medium: "Oil on canvas",
+    dimensions: "90 × 70 cm",
+    position: { top: "60%", left: "40%" },
+    color: "bg-emerald-500",
+  },
+  {
+    id: 4,
+    title: "Emotional Landscape",
+    description: "A visual representation of the human emotional landscape, with all its complexity.",
+    year: "2021",
+    medium: "Watercolor",
+    dimensions: "80 × 60 cm",
+    position: { top: "75%", left: "75%" },
+    color: "bg-sky-500",
+  },
+  {
+    id: 5,
+    title: "Memory Fragments",
+    description: "Exploring how memories fragment and reconnect through abstract visual language.",
+    year: "2022",
+    medium: "Digital art printed on canvas",
+    dimensions: "110 × 85 cm",
+    position: { top: "45%", left: "15%" },
+    color: "bg-violet-500",
+  },
+]
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [selectedArtwork, setSelectedArtwork] = useState<number | null>(null)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const handleArtworkClick = (id: number) => {
+    setSelectedArtwork(id)
+  }
+
+  const closeArtworkDetail = () => {
+    setSelectedArtwork(null)
+  }
+
+  const selectedArtworkData = artworks.find((artwork) => artwork.id === selectedArtwork)
+
+  return (
+    <main className="relative min-h-screen w-full overflow-hidden bg-neutral-100">
+      <div className="container mx-auto px-4 py-8">
+        <header className="mb-8 text-center">
+          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Zilon: The Rebel of Montreal</h1>
+          <p className="mt-2 text-lg text-muted-foreground">Punk, raw, and expressive—discover the world of a legendary street artist.</p>
+        </header>
+
+        <ArtworkWall artworks={artworks} onArtworkClick={handleArtworkClick} />
+      </div>
+
+      <AnimatePresence>
+        {selectedArtwork && selectedArtworkData && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed mb-5 inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="relative max-h-[90vh] w-full max-w-3xl overflow-auto rounded-lg bg-white p-6 shadow-xl"
+            >
+              <Button variant="ghost" size="icon" className="absolute right-4 top-4" onClick={closeArtworkDetail}>
+                <X className="h-5 w-5" />
+                <span className="sr-only">close</span>
+              </Button>
+
+              <ArtworkDetail artwork={selectedArtworkData} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </main>
+  )
 }
+
